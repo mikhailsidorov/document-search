@@ -1,5 +1,7 @@
 import { Fragment, FC, ReactNode } from 'react';
 
+import { NavigationLink } from './NavigationLink';
+
 export interface LayoutProps {
   children?: ReactNode
 };
@@ -10,8 +12,8 @@ export const Layout:FC<LayoutProps>  = ({ children }) => {
       <nav className="navbar is-dark">
         <div className="navbar-menu">
           <div className="navbar-start">
-            <a className="navbar-item is-active" href="/">Создать документ</a>
-            <a className="navbar-item" href="/">Поиск документов</a>
+            <NavigationLink exact={true} className="navbar-item" to="/documents">Поиск документов</NavigationLink>
+            <NavigationLink className="navbar-item" to="/documents/create">Создать документ</NavigationLink>
           </div>
         </div>
       </nav>
