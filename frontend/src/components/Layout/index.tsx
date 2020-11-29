@@ -1,7 +1,7 @@
-import { Fragment, FC } from 'react';
+import { Fragment, FC, ReactNode } from 'react';
 
 export interface LayoutProps {
-  children?: JSX.Element | String
+  children?: ReactNode
 };
 
 export const Layout:FC<LayoutProps>  = ({ children }) => {
