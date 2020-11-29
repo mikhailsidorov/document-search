@@ -48,9 +48,9 @@
       "warn",
       {
         "code": 120,
-        "ignoreStrings": true,
-        "ignoreTemplateLiterals": true,
-        "ignoreComments": true
+        "ignoreStrings": false,
+        "ignoreTemplateLiterals": false,
+        "ignoreComments": false
       }
     ],
     "no-plusplus": [
@@ -95,6 +95,7 @@
       1,
       "element"
     ],
-    "react/react-in-jsx-scope": "off"
+    "react/react-in-jsx-scope": "off",
+    "jsx-a11y/label-has-associated-control": "off"
   }
 }
