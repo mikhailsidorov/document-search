@@ -1,5 +1,6 @@
 import { BrowserRouter, Switch, Route, Redirect } from 'react-router-dom';
 
+import { DocumentCreatePage, DocumentSearchPage } from './pages';
 import { Layout } from './components/Layout';
 import './App.scss';
 
@@ -9,10 +10,10 @@ function App() {
       <Layout>
         <Switch>
           <Route path="/documents/create">
-            Create
+            <DocumentCreatePage />
           </Route>
           <Route path="/documents" exact>
-            Search
+            <DocumentSearchPage />
           </Route>
           <Redirect to="/documents" />
         </Switch>
