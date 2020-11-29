@@ -17,7 +17,7 @@ export const Layout:FC<LayoutProps>  = ({ children }) => {
           </div>
         </div>
       </nav>
-      <main>{ children }</main>
+      <section className="section">{ children }</section>
     </Fragment>
   );
 };
