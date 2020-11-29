@@ -4,7 +4,6 @@
     "@typescript-eslint"
   ],
   "extends": [
-    "airbnb-typescript",
     "react-app",
     "prettier"
   ],
@@ -48,9 +47,9 @@
       "warn",
       {
         "code": 120,
-        "ignoreStrings": false,
-        "ignoreTemplateLiterals": false,
-        "ignoreComments": false
+        "ignoreStrings": true,
+        "ignoreTemplateLiterals": true,
+        "ignoreComments": true
       }
     ],
     "no-plusplus": [
