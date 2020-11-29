@@ -1,6 +1,6 @@
 import { FC } from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faAngleDown } from '@fortawesome/free-solid-svg-icons';
+
+import { Document } from '../components/Document';
 
 export interface DocumentSearchPageProps {}
 
@@ -58,83 +58,30 @@ export const DocumentSearchPage: FC<DocumentSearchPageProps> = () => {
         </div>
       </form>
       <div className="column">
-        <div className="block">
-          <div className="card is-fullwidth">
-            <header className="card-header">
-              <p className="card-header-title">Название документа</p>
-              <a href="/" className="card-header-icon" aria-label="more options">
-                <span className="icon">
-                  <FontAwesomeIcon icon={faAngleDown} aria-hidden="true" />
-                </span>
-              </a>
-            </header>
-            <div className="card-content">
-              <div className="content">
-                <p>ID: 23123</p>
-                <p>
-                  Дата: <time dateTime="2016-1-1">11:09 PM - 1 Jan 2016</time>
-                </p>
-                <p>
-                  Lorem ipsum dolor, sit amet consectetur adipisicing elit. Neque ratione hic repellendus modi rerum quo
-                  laboriosam vel nihil! Amet nobis iure doloribus cum ab velit molestias quibusdam consequatur cumque
-                  dicta.
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div className="block">
-          <div className="card is-fullwidth">
-            <header className="card-header">
-              <p className="card-header-title">Название документа</p>
-              <a href="/" className="card-header-icon" aria-label="more options">
-                <span className="icon">
-                  <FontAwesomeIcon icon={faAngleDown} aria-hidden="true" />
-                </span>
-              </a>
-            </header>
-            <div className="card-content is-hidden">
-              <div className="content">
-                <p>ID: 23123</p>
-                <p>
-                  Дата: <time dateTime="2016-1-1">11:09 PM - 1 Jan 2016</time>
-                </p>
-                <p>
-                  Lorem ipsum dolor, sit amet consectetur adipisicing elit. Neque ratione hic repellendus modi rerum quo
-                  laboriosam vel nihil! Amet nobis iure doloribus cum ab velit molestias quibusdam consequatur cumque
-                  dicta.
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div className="block">
-          <div className="card is-fullwidth">
-            <header className="card-header">
-              <p className="card-header-title">Название документа</p>
-              <a href="/" className="card-header-icon" aria-label="more options">
-                <span className="icon">
-                  <FontAwesomeIcon icon={faAngleDown} aria-hidden="true" />
-                </span>
-              </a>
-            </header>
-            <div className="card-content is-hidden">
-              <div className="content">
-                <p>ID: 23123</p>
-                <p>
-                  Дата: <time dateTime="2016-1-1">11:09 PM - 1 Jan 2016</time>
-                </p>
-                <p>
-                  Lorem ipsum dolor, sit amet consectetur adipisicing elit. Neque ratione hic repellendus modi rerum quo
-                  laboriosam vel nihil! Amet nobis iure doloribus cum ab velit molestias quibusdam consequatur cumque
-                  dicta.
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
+        <Document
+          name="Название документа"
+          id="123"
+          description="Lorem ipsum dolor, sit amet consectetur adipisicing elit. Neque ratione hic repellendus modi quo vel nihil! Amet nobis iure doloribus cum ab velit molestias quibusdam consequatur cumque dicta."
+          date="21.01.2020"
+        />
+        <Document
+          name="Название документа"
+          id="123"
+          description="Lorem ipsum dolor, sit amet consectetur adipisicing elit. Neque ratione hic repellendus modi quo vel nihil! Amet nobis iure doloribus cum ab velit molestias quibusdam consequatur cumque dicta."
+          date="21.01.2020"
+        />
+        <Document
+          name="Название документа"
+          id="123"
+          description="Lorem ipsum dolor, sit amet consectetur adipisicing elit. Neque ratione hic repellendus modi quo vel nihil! Amet nobis iure doloribus cum ab velit molestias quibusdam consequatur cumque dicta."
+          date="21.01.2020"
+        />
+        <Document
+          name="Название документа"
+          id="123"
+          description="Lorem ipsum dolor, sit amet consectetur adipisicing elit. Neque ratione hic repellendus modi quo vel nihil! Amet nobis iure doloribus cum ab velit molestias quibusdam consequatur cumque dicta."
+          date="21.01.2020"
+        />
       </div>
     </div>
   );
