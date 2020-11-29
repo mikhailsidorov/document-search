@@ -1,0 +1,14 @@
+# virtualenv
+.venv
+venv
+
+# sqlite
+*.sqlite
+
+
+# Python
+*.pyc
+
+# IDE
+.vscode
+.idea
