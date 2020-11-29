@@ -1,13 +1,23 @@
+import { BrowserRouter, Switch, Route, Redirect } from 'react-router-dom';
+
 import { Layout } from './components/Layout';
 import './App.scss';
 
 function App() {
   return (
-    <div className="App">
+    <BrowserRouter>
       <Layout>
-        App
+        <Switch>
+          <Route path="/documents/create">
+            Create
+          </Route>
+          <Route path="/documents" exact>
+            Search
+          </Route>
+          <Redirect to="/documents" />
+        </Switch>
       </Layout>
-    </div>
+    </BrowserRouter>
   );
 }
 
