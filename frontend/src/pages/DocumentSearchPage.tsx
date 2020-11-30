@@ -1,10 +1,36 @@
-import { FC } from 'react';
+import { FC, useEffect } from 'react';
+import { useSelector } from 'react-redux';
 
+import { fetchDocuments } from '../store/documents';
+import { useAppDispatch } from '../store';
 import { Document } from '../components/Document';
+import { RootState } from '../store';
+import { IDocument } from '../types';
+import { Spinner } from '../components/UI/Spinner';
 
 export interface DocumentSearchPageProps {}
 
 export const DocumentSearchPage: FC<DocumentSearchPageProps> = () => {
+  const dispatch = useAppDispatch();
+  useEffect(() => {
+    const promise = dispatch(fetchDocuments({ sortBy: 'created_at', orderBy: 'desc' }));
+    return () => {
+      promise.abort();
+    };
+  }, [dispatch]);
+
+  const { documents, loading } = useSelector((state: RootState) => state.documents);
+  const docs = documents ? documents.map((document: IDocument) => (
+        <Document
+          key={document.id}
+          name={document.name}
+          id={document.id}
+          description={document.description}
+          createdAt={document.createdAt}
+        />
+      ))
+    : null;
+
   return (
     <div className="columns">
       <form className="column is-3">
@@ -57,32 +83,7 @@ export const DocumentSearchPage: FC<DocumentSearchPageProps> = () => {
           </div>
         </div>
       </form>
-      <div className="column">
-        <Document
-          name="Название документа"
-          id="123"
-          description="Lorem ipsum dolor, sit amet consectetur adipisicing elit. Neque ratione hic repellendus modi quo vel nihil! Amet nobis iure doloribus cum ab velit molestias quibusdam consequatur cumque dicta."
-          date="21.01.2020"
-        />
-        <Document
-          name="Название документа"
-          id="123"
-          description="Lorem ipsum dolor, sit amet consectetur adipisicing elit. Neque ratione hic repellendus modi quo vel nihil! Amet nobis iure doloribus cum ab velit molestias quibusdam consequatur cumque dicta."
-          date="21.01.2020"
-        />
-        <Document
-          name="Название документа"
-          id="123"
-          description="Lorem ipsum dolor, sit amet consectetur adipisicing elit. Neque ratione hic repellendus modi quo vel nihil! Amet nobis iure doloribus cum ab velit molestias quibusdam consequatur cumque dicta."
-          date="21.01.2020"
-        />
-        <Document
-          name="Название документа"
-          id="123"
-          description="Lorem ipsum dolor, sit amet consectetur adipisicing elit. Neque ratione hic repellendus modi quo vel nihil! Amet nobis iure doloribus cum ab velit molestias quibusdam consequatur cumque dicta."
-          date="21.01.2020"
-        />
-      </div>
+      <div className="column">{loading ? <Spinner /> :  docs }</div>
     </div>
   );
 };

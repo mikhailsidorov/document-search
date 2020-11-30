@@ -3,16 +3,13 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faAngleDown } from '@fortawesome/free-solid-svg-icons';
 import cx from 'classnames';
 
+import { IDocument } from '../../types';
+
 import styles from './Document.module.scss';
 
-export interface DocumentProps {
-  id: string;
-  name: string;
-  date: string;
-  description?: string;
-}
 
-export const Document: FC<DocumentProps> = ({ id, name, date, description }) => {
+
+export const Document: FC<IDocument> = ({ id, name, createdAt, description }) => {
   const [opened, setOpened] = useState(false);
 
   const handleOpenButtonClick = (event: MouseEvent) => {
@@ -59,7 +56,7 @@ export const Document: FC<DocumentProps> = ({ id, name, date, description }) => 
         <div className={cardContentClassNames}>
           <div className="content">
             <p>ID: {id}</p>
-            <p>Дата: {date}</p>
+            <p>Дата: {createdAt}</p>
             <p>{description}</p>
           </div>
         </div>
