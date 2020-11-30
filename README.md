@@ -4,6 +4,7 @@
 
 * [Python 3.8 or later](https://www.python.org/downloads/)
 * [Poetry](https://python-poetry.org/docs/#installation)
+* [Node](https://nodejs.org/en/download/)
 
 
 ## Running
@@ -20,3 +21,10 @@
 `uvicorn backend.main:app`
 
 Server will be started on <http://127.0.0.1:8000>
+
+### Frontend
+
+`npm install`
+`npm start`
+
+Frontend will be started on <http://127.0.0.1:3000>

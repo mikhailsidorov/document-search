@@ -1,0 +1,10 @@
+.document {
+  cursor: pointer;
+}
+
+.openButtonIcon {
+  transition: transform .3s;
+  &:global(.rotated) {
+    transform: rotate(180deg);
+  }
+}
