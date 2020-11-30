@@ -12,8 +12,14 @@ def get_document(db: Session, document_id: int) -> Optional[models.Document]:
 
 def get_documents(db: Session, offset: int = 0, limit: int = 100,
                   date_start: datetime = None, date_end: datetime = None) -> List[models.Document]:
-    return db.query(models.Document).filter(models.Document.created_at.between(date_start, date_end))\
-        .offset(offset).limit(limit).all()
+    query = db.query(models.Document)
+    if date_start:
+        query = query.filter(models.Document.created_at >= date_start)
+
+    if date_end:
+        query = query.filter(models.Document.created_at <= date_end)
+
+    return query.offset(offset).limit(limit).all()
 
 
 def create_document(db: Session, document: schemas.DocumentCreate) -> models.Document:
