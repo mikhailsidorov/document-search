@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction, createAsyncThunk, SerializedError } from '@reduxjs/toolkit';
 
-import { IDocument, IDocumentsGetListParams } from '../types';
+import { IDocument, IDocumentGetParams, IDocumentsGetListParams } from '../types';
 
 import { documentsAPI } from '../api';
 
@@ -12,8 +12,14 @@ export interface IDocumentsState {
 
 export const fetchDocuments = createAsyncThunk(
   'documents/fetchDocuments',
-  async (params: IDocumentsGetListParams, thunkAPI) => {
-    const response = await documentsAPI.getList(params);
+  async (params: IDocumentGetParams | IDocumentsGetListParams, thunkAPI) => {
+    let response;
+    if ('id' in params) {
+      response = await documentsAPI.get(params);
+      return [response.data];
+    } else {
+      response = await documentsAPI.getList(params);
+    }
     return response.data;
   }
 );
@@ -40,8 +46,9 @@ export const documentsSlice = createSlice({
       state.loading = false;
     });
     builder.addCase(fetchDocuments.rejected, (state, action) => {
-      state.loading = false;
+      state.documents = [];
       state.error = action.error;
+      state.loading = false;
     });
   },
 });

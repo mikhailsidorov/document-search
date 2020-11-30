@@ -5,13 +5,15 @@ export interface IDocument {
   description?: string;
 }
 
+
+export type SortBy = 'id' | 'createdAt' | 'name';
+export type OrderBy = 'desc' | 'asc';
 export interface IDocumentsGetListParams {
-  id?: string;
-  dateStart?: string;
-  dateEnd?: string;
+  dateStart?: string | null;
+  dateEnd?: string | null;
   name?: string;
-  sortBy?: 'id' | 'created_at' | 'name';
-  orderBy?: 'desc' | 'asc';
+  sortBy?: SortBy;
+  orderBy?: OrderBy;
   offset?: number;
   limit?: number;
 }
@@ -24,3 +26,5 @@ export interface IDocumentCreateParams {
 export interface IDocumentGetParams {
   id: string;
 }
+
+

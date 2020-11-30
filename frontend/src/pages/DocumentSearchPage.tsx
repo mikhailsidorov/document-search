@@ -1,35 +1,88 @@
-import { FC, useEffect } from 'react';
+import { FC, useEffect, useState, ChangeEvent } from 'react';
 import { useSelector } from 'react-redux';
 
 import { fetchDocuments } from '../store/documents';
 import { useAppDispatch } from '../store';
 import { Document } from '../components/Document';
 import { RootState } from '../store';
-import { IDocument } from '../types';
+import { IDocument, SortBy, OrderBy } from '../types';
 import { Spinner } from '../components/UI/Spinner';
 
 export interface DocumentSearchPageProps {}
 
 export const DocumentSearchPage: FC<DocumentSearchPageProps> = () => {
   const dispatch = useAppDispatch();
+
+  const [id, setId] = useState('');
+  const [dateStart, setDateStart] = useState<string>('');
+  const [dateEnd, setDateEnd] = useState<string>('');
+  const [name, setName] = useState('');
+  const [sortBy, setSortBy] = useState<SortBy>('createdAt');
+  const [orderBy, setOrderBy] = useState<OrderBy>('desc');
+  
   useEffect(() => {
-    const promise = dispatch(fetchDocuments({ sortBy: 'created_at', orderBy: 'desc' }));
-    return () => {
-      promise.abort();
-    };
-  }, [dispatch]);
+    let params;
+    if (id) {
+      params = { id };
+    } else if (dateStart || dateEnd || name || sortBy || orderBy) {
+      params = { dateStart, dateEnd, name, sortBy, orderBy };
+    }
+    if (params) {
+      console.log(params);
+      const promise = dispatch(fetchDocuments(params));
+      return () => {
+        if (promise) {
+          promise.abort();
+        }
+      };
+    }
+  }, [dispatch, id, dateStart, dateEnd, name, sortBy, orderBy]);
 
   const { documents, loading } = useSelector((state: RootState) => state.documents);
   const docs = documents ? documents.map((document: IDocument) => (
-        <Document
-          key={document.id}
-          name={document.name}
-          id={document.id}
-          description={document.description}
-          createdAt={document.createdAt}
-        />
-      ))
+    <Document
+      key={document.id}
+      name={document.name}
+      id={document.id}
+      description={document.description}
+      createdAt={document.createdAt}
+    />
+  ))
     : null;
+  
+  const handleIdChange = (event: ChangeEvent<HTMLInputElement>) => {
+    setId(event.target.value);
+  };
+
+  const handleDateStartChange = (event: ChangeEvent<HTMLInputElement>) => {
+    console.log(event.target.value)
+    setDateStart(new Date(event.target.value).toISOString());
+    
+  };
+  
+  const handleDateEndChange = (event: ChangeEvent<HTMLInputElement>) => {
+    console.log(event.target.value)
+    setDateEnd(new Date(event.target.value).toISOString());
+  };
+
+  const handleNameChange = (event: ChangeEvent<HTMLInputElement>) => {
+    console.log(event.target.value);
+    setName(event.target.value);
+  };
+
+  const handleSortByChange = (event: ChangeEvent<HTMLSelectElement>) => {
+    console.log(event.target.value);
+    if (event.target.value === 'id' || event.target.value === 'name' || event.target.value === 'createdAt') {
+      setSortBy(event.target.value);
+    }
+  };
+
+  const handleOrderByChange = (event: ChangeEvent<HTMLSelectElement>) => {
+    console.log(event.target.value);
+    if (event.target.value === 'asc' || event.target.value === 'desc') {
+      setOrderBy(event.target.value);
+    }
+  };
 
   return (
     <div className="columns">
@@ -37,7 +90,7 @@ export const DocumentSearchPage: FC<DocumentSearchPageProps> = () => {
         <div className="field">
           <label className="label">ID документа</label>
           <div className="control">
-            <input name="documentId" className="input" type="text" />
+            <input name="documentId" className="input" type="text" onChange={handleIdChange} />
           </div>
         </div>
         <div className="field">
@@ -45,10 +98,10 @@ export const DocumentSearchPage: FC<DocumentSearchPageProps> = () => {
           <div className="control">
             <div className="columns">
               <div className="column is-6">
-                <input name="dateStart" className="input" type="date" />
+                <input name="dateStart" className="input" type="date" onChange={handleDateStartChange} />
               </div>
               <div className="column is-6">
-                <input name="dateEnd" className="input" type="date" />
+                <input name="dateEnd" className="input" type="date" onChange={handleDateEndChange} />
               </div>
             </div>
           </div>
@@ -56,7 +109,7 @@ export const DocumentSearchPage: FC<DocumentSearchPageProps> = () => {
         <div className="field">
           <label className="label">Название документа</label>
           <div className="control">
-            <input name="documentId" className="input" type="text" />
+            <input name="name" className="input" type="text" onChange={handleNameChange} />
           </div>
         </div>
         <div className="field">
@@ -65,17 +118,18 @@ export const DocumentSearchPage: FC<DocumentSearchPageProps> = () => {
             <div className="columns">
               <div className="column is-6 is-fullwidth">
                 <div className="select">
-                  <select>
-                    <option>Создан</option>
-                    <option>Название документа</option>
+                  <select onChange={handleSortByChange}>
+                    <option value="createdAt">Создан</option>
+                    <option value="name">Название документа</option>
+                    <option value="id">ID</option>
                   </select>
                 </div>
               </div>
               <div className="column is-6">
                 <div className="select is-fullwidth">
-                  <select>
-                    <option>По возрастанию</option>
-                    <option>По убыванию</option>
+                  <select onChange={handleOrderByChange}>
+                    <option value="desc">По убыванию</option>
+                    <option value="asc">По возрастанию</option>
                   </select>
                 </div>
               </div>
@@ -83,7 +137,9 @@ export const DocumentSearchPage: FC<DocumentSearchPageProps> = () => {
           </div>
         </div>
       </form>
-      <div className="column">{loading ? <Spinner /> :  docs }</div>
+      <div className="column">
+        {loading ? <Spinner /> : docs}
+      </div>
     </div>
   );
 };
