@@ -29,6 +29,8 @@
 
 Server will be started on <http://127.0.0.1:8000>
 
+API docs located on <http://127.0.0.1:8000/docs>
+
 ### Frontend
 
 `npm install`
