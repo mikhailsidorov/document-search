@@ -1,12 +1,16 @@
 from datetime import datetime
-from typing import List
+from typing import List, Literal, Optional
 
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, Query
 from sqlalchemy.orm import Session
+from humps import decamelize
 
 from . import schemas, crud, models
 from ..database import get_db
 
+
+SORTING_FIELDS = ['id', 'created_at', 'name']
+ORDERING_TYPES = ['asc', 'desc']
 
 documents_router = APIRouter()
 
@@ -17,9 +21,23 @@ def create_document(document: schemas.DocumentCreate, db: Session = Depends(get_
 
 
 @documents_router.get('/', response_model=List[schemas.Document])
-def read_documents(offset: int = 0, limit: int = 100, date_start: datetime = None,
-                   date_end: datetime = None, db: Session = Depends(get_db)) -> List[models.Document]:
-    documents = crud.get_documents(db, offset=offset, limit=limit, date_start=date_start, date_end=date_end)
+def read_documents(
+        name: Optional[str] = Query(None),
+        order_by: Literal['asc', 'desc'] = Query('desc', alias='orderBy'),
+        sort_by: Literal['id', 'createdAt', 'name'] = Query('createAt', alias='sortBy'),
+        offset: int = Query(0),
+        limit: int = Query(100),
+        date_start: Optional[datetime] = Query(None, alias='dateStart'),
+        date_end: Optional[datetime] = Query(None, alias='dateEnd'),
+        db: Session = Depends(get_db)) -> List[models.Document]:
+
+    decamelized_sort_by: Literal['id', 'created_at', 'name'] = decamelize(sort_by)
+    if decamelized_sort_by not in SORTING_FIELDS:
+        decamelized_sort_by = 'created_at'
+
+    documents = crud.get_documents(db=db, name=name, order_by=order_by,
+                                   sort_by=decamelized_sort_by, offset=offset,
+                                   limit=limit, date_start=date_start, date_end=date_end)
     return documents
 
 

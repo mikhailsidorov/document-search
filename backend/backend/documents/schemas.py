@@ -1,8 +1,8 @@
 from datetime import datetime
-from typing import Optional
+from typing import Optional, Literal
 
-from pydantic import BaseModel, Field
-from humps import camelize
+from pydantic import BaseModel, ValidationError, validator
+from humps import camelize, decamelize
 
 
 def to_camel_case(string: str) -> str:
@@ -16,7 +16,7 @@ class CamelModel(BaseModel):
 
 
 class DocumentBase(CamelModel):
-    name: str = Field()
+    name: str
     description: Optional[str] = None
 
     class Config():
