@@ -8,6 +8,7 @@ authors = ["Mikhail Sidorov <7780462+mikhailsidorov@users.noreply.github.com>"]
 python = "^3.8"
 fastapi = {extras = ["all"], version = "^0.61.2"}
 sqlalchemy = "^1.3.20"
+pyhumps = "^1.6.1"
 
 [tool.poetry.dev-dependencies]
 pytest = "^5.2"
