@@ -61,7 +61,7 @@ export const DocumentSearchPage: FC<DocumentSearchPageProps> = () => {
           name={document.name}
           id={document.id}
           description={document.description}
-          createdAt={document.createdAt}
+          createdAt={new Date(new Date(document.createdAt)).toLocaleString()}
         />
       ))
     : null;
