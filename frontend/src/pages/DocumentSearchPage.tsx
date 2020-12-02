@@ -5,7 +5,7 @@ import { fetchDocuments } from '../store/documents';
 import { useAppDispatch } from '../store';
 import { Document } from '../components/Document';
 import { RootState } from '../store';
-import { IDocument, SortBy, OrderBy } from '../types';
+import { IDocument, SortBy, OrderBy, IDocumentGetParams, IDocumentsGetListParams } from '../types';
 import { Spinner } from '../components/UI/Spinner';
 
 export interface DocumentSearchPageProps {}
@@ -19,16 +19,31 @@ export const DocumentSearchPage: FC<DocumentSearchPageProps> = () => {
   const [name, setName] = useState('');
   const [sortBy, setSortBy] = useState<SortBy>('createdAt');
   const [orderBy, setOrderBy] = useState<OrderBy>('desc');
-  
+
   useEffect(() => {
-    let params;
+    let params: IDocumentGetParams | IDocumentsGetListParams | null = null;
     if (id) {
       params = { id };
     } else if (dateStart || dateEnd || name || sortBy || orderBy) {
-      params = { dateStart, dateEnd, name, sortBy, orderBy };
+      params = {};
+      if (dateStart) {
+        params.dateStart = dateStart;
+      }
+      if (dateEnd) {
+        params.dateEnd = dateEnd;
+      }
+      if (name) {
+        params.name = name;
+      }
+      if (sortBy) {
+        params.sortBy = sortBy;
+      }
+      if (orderBy) {
+        params.orderBy = orderBy;
+      }
     }
+
     if (params) {
-      console.log(params);
       const promise = dispatch(fetchDocuments(params));
       return () => {
         if (promise) {
@@ -39,46 +54,41 @@ export const DocumentSearchPage: FC<DocumentSearchPageProps> = () => {
   }, [dispatch, id, dateStart, dateEnd, name, sortBy, orderBy]);
 
   const { documents, loading } = useSelector((state: RootState) => state.documents);
-  const docs = documents ? documents.map((document: IDocument) => (
-    <Document
-      key={document.id}
-      name={document.name}
-      id={document.id}
-      description={document.description}
-      createdAt={document.createdAt}
-    />
-  ))
+  const docs = documents
+    ? documents.map((document: IDocument) => (
+        <Document
+          key={document.id}
+          name={document.name}
+          id={document.id}
+          description={document.description}
+          createdAt={document.createdAt}
+        />
+      ))
     : null;
-  
+
   const handleIdChange = (event: ChangeEvent<HTMLInputElement>) => {
     setId(event.target.value);
   };
 
   const handleDateStartChange = (event: ChangeEvent<HTMLInputElement>) => {
-    console.log(event.target.value)
     setDateStart(new Date(event.target.value).toISOString());
-    
   };
-  
+
   const handleDateEndChange = (event: ChangeEvent<HTMLInputElement>) => {
-    console.log(event.target.value)
     setDateEnd(new Date(event.target.value).toISOString());
   };
 
   const handleNameChange = (event: ChangeEvent<HTMLInputElement>) => {
-    console.log(event.target.value);
     setName(event.target.value);
   };
 
   const handleSortByChange = (event: ChangeEvent<HTMLSelectElement>) => {
-    console.log(event.target.value);
     if (event.target.value === 'id' || event.target.value === 'name' || event.target.value === 'createdAt') {
       setSortBy(event.target.value);
     }
   };
 
   const handleOrderByChange = (event: ChangeEvent<HTMLSelectElement>) => {
-    console.log(event.target.value);
     if (event.target.value === 'asc' || event.target.value === 'desc') {
       setOrderBy(event.target.value);
     }
@@ -137,9 +147,7 @@ export const DocumentSearchPage: FC<DocumentSearchPageProps> = () => {
           </div>
         </div>
       </form>
-      <div className="column">
-        {loading ? <Spinner /> : docs}
-      </div>
+      <div className="column">{loading ? <Spinner /> : docs}</div>
     </div>
   );
 };
