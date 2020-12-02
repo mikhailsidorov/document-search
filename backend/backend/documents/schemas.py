@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, timezone
 from typing import Optional, Literal
 
 from pydantic import BaseModel, ValidationError, validator
@@ -34,3 +34,6 @@ class Document(DocumentBase):
 
     class Config():
         orm_mode = True
+        json_encoders = {
+            datetime: lambda dt: dt.replace(microsecond=0, tzinfo=timezone.utc).isoformat()
+        }
