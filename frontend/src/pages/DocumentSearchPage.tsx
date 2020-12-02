@@ -75,7 +75,9 @@ export const DocumentSearchPage: FC<DocumentSearchPageProps> = () => {
   };
 
   const handleDateEndChange = (event: ChangeEvent<HTMLInputElement>) => {
-    setDateEnd(new Date(event.target.value).toISOString());
+    let dateEnd = new Date(event.target.value);
+    dateEnd.setHours(23, 59, 59, 9999);
+    setDateEnd(dateEnd.toISOString());
   };
 
   const handleNameChange = (event: ChangeEvent<HTMLInputElement>) => {
