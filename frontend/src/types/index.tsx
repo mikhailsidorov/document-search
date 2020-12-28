@@ -27,4 +27,6 @@ export interface IDocumentGetParams {
   id: string;
 }
 
-
+export interface IValidationError {
+  detail: {loc: string[]; msg: string; type: string}[];
+}

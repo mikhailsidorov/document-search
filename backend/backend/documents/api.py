@@ -1,7 +1,7 @@
 from datetime import datetime
 from typing import List, Literal, Optional
 
-from fastapi import APIRouter, Depends, HTTPException, Query
+from fastapi import APIRouter, Depends, HTTPException, Query, Path
 from sqlalchemy.orm import Session
 from humps import decamelize
 
@@ -41,7 +41,7 @@ def read_documents(
     return documents
 
 
-@documents_router.get(path='/{document_id}', response_model=schemas.Document)
+@documents_router.get('/{document_id}', response_model=schemas.Document)
 def read_document(document_id: int, db: Session = Depends(get_db)) -> models.Document:
     db_document = crud.get_document(db, document_id=document_id)
     if db_document is None:

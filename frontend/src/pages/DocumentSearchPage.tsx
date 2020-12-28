@@ -1,5 +1,6 @@
 import { FC, useEffect, useState, ChangeEvent } from 'react';
 import { useSelector } from 'react-redux';
+import cx from 'classnames';
 
 import { fetchDocuments } from '../store/documents';
 import { useAppDispatch } from '../store';
@@ -53,7 +54,8 @@ export const DocumentSearchPage: FC<DocumentSearchPageProps> = () => {
     }
   }, [dispatch, id, dateStart, dateEnd, name, sortBy, orderBy]);
 
-  const { documents, loading } = useSelector((state: RootState) => state.documents);
+  const { documents, loading, error } = useSelector((state: RootState) => state.documents);
+
   const docs = documents
     ? documents.map((document: IDocument) => (
         <Document
@@ -96,15 +98,28 @@ export const DocumentSearchPage: FC<DocumentSearchPageProps> = () => {
     }
   };
 
+  const documentError = error &&  'detail' in error && error.detail.find(message => {
+    return message.loc.includes('document_id');
+  })
+
+  const documentIdClasses = cx('input', {
+    'is-danger': documentError,
+  });
+
+   
+
   return (
     <div className="columns">
       <form className="column is-3">
+        
         <div className="field">
           <label className="label">ID документа</label>
           <div className="control">
-            <input name="documentId" className="input" type="text" onChange={handleIdChange} />
+            <input name="documentId" className={documentIdClasses} type="text" onChange={handleIdChange} />
           </div>
+          {documentError ? <p className="help is-danger">{documentError.msg}</p> : null}
         </div>
+
         <div className="field">
           <label className="label">Создан</label>
           <div className="control">
