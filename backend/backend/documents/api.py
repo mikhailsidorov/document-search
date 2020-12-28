@@ -41,8 +41,8 @@ def read_documents(
     return documents
 
 
-@documents_router.get(path='/{document_id}', response_model=schemas.Document)
-def read_document(document_id: int = Path(..., alias='documentId'), db: Session = Depends(get_db)) -> models.Document:
+@documents_router.get('/{document_id}', response_model=schemas.Document)
+def read_document(document_id: int, db: Session = Depends(get_db)) -> models.Document:
     db_document = crud.get_document(db, document_id=document_id)
     if db_document is None:
         raise HTTPException(status_code=404, detail='Document not found')

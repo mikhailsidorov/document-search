@@ -1,28 +1,39 @@
 import { createSlice, PayloadAction, createAsyncThunk, SerializedError } from '@reduxjs/toolkit';
+import { AxiosError } from 'axios';
 
-import { IDocument, IDocumentGetParams, IDocumentsGetListParams } from '../types';
+import { IDocument, IDocumentGetParams, IDocumentsGetListParams, IValidationError } from '../types';
 
 import { documentsAPI } from '../api';
 
 export interface IDocumentsState {
   documents: Array<IDocument>;
   loading: boolean;
-  error: SerializedError | null;
+  error: IValidationError | SerializedError | null;
 }
 
-export const fetchDocuments = createAsyncThunk(
-  'documents/fetchDocuments',
-  async (params: IDocumentGetParams | IDocumentsGetListParams, thunkAPI) => {
-    let response;
+export const fetchDocuments = createAsyncThunk<
+  IDocument[],
+  IDocumentGetParams | IDocumentsGetListParams,
+  { rejectValue: IValidationError }
+>('documents/fetchDocuments', async (params, { rejectWithValue }) => {
+  let response;
+  try {
     if ('id' in params) {
       response = await documentsAPI.get(params);
       return [response.data];
     } else {
       response = await documentsAPI.getList(params);
+      return response.data;
     }
-    return response.data;
+  } catch (err) {
+    const error: AxiosError<IValidationError> = err;
+
+    if (!error.response) {
+      throw err;
+    }
+    return rejectWithValue(error.response.data as IValidationError);
   }
-);
+});
 
 export const documentsSlice = createSlice({
   name: 'documents',
@@ -37,7 +48,7 @@ export const documentsSlice = createSlice({
     },
   },
   extraReducers: (builder) => {
-    builder.addCase(fetchDocuments.pending, (state, action) => {
+    builder.addCase(fetchDocuments.pending, (state) => {
       state.loading = true;
       state.error = null;
     });
@@ -47,7 +58,11 @@ export const documentsSlice = createSlice({
     });
     builder.addCase(fetchDocuments.rejected, (state, action) => {
       state.documents = [];
-      state.error = action.error;
+      if (action.payload) {
+        state.error = action.payload;
+      } else {
+        state.error = action.error;
+      }
       state.loading = false;
     });
   },
